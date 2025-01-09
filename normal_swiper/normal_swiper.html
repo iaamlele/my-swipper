@@ -44,7 +44,9 @@
                 background-color: #ccc;
                 margin-left: 10px;
             }
-            .swiper-dot .dot-item:nth-of-type(1) {
+            
+            /* 这是一个伪类选择器，选择 .dot-item 中的第一个元素 */
+            .swiper-dot .dot-item:nth-of-type(1) { 
                 margin-left: 0;
             }
         
@@ -77,30 +79,30 @@
         const imgArr = [
             {
                 url: '#',
-                imgPath: '../img/1.jpg',
+                imgPath: '../img/1.png',
             },
             {
                 url: '#',
-                imgPath: '../img/2.jpg',
+                imgPath: '../img/2.png',
             },
             {
                 url: '#',
-                imgPath: '../img/3.jpg',
+                imgPath: '../img/3.png',
             },
             {
                 url: '#',
-                imgPath: '../img/4.jpg',
+                imgPath: '../img/4.png',
             },
             {
                 url: '#',
-                imgPath: '../img/5.jpg',
+                imgPath: '../img/5.png',
             }
         ];
 
         new Swiper({
             imgArr, // 图片数组
-            aniTime: 1000, // 动画时间
-            intervalTime: 1000, // 轮播时间
+            aniTime: 500, // 动画时间
+            intervalTime: 500, // 停留时间
             autoplay: true // 是否自动播放
         }).init();
         console.log(Date.now() - bef_time);
