@@ -6,19 +6,17 @@ function Swiper(obj) {
     this.nowIndex = 0;
 
     this.swiperListDom = document.getElementsByClassName('swiper-list')[0];
-
+    this.mainDom;
     this.swiperSpotDom;
     this.leftBtn;
     this.rightBtn;
-    this.mainDom;
-
-    this.moveWidth = this.swiperListDom.offsetWidth;
+    
+    this.moveWidth = this.swiperListDom.offsetWidth; //
     this.timer = null;
 
     this.prev = Date.now();
 
     this.autoplay = obj.autoplay;
-
 }
 
 Swiper.prototype = {
@@ -91,7 +89,7 @@ Swiper.prototype = {
             that.nowIndex = that.imgArr.length - 1;
             that.setActiveDot();
             setTimeout(function() {					
-                that.mainDom.style.transitionProperty = 'none';
+                that.mainDom.style.transition = 'none';
                 that.mainDom.style.left = `${-that.imgArr.length * that.moveWidth}px`;
             }, aniTime)
         } else {
@@ -109,7 +107,7 @@ Swiper.prototype = {
             that.nowIndex = 0;
             that.setActiveDot();
             setTimeout(function() {
-                that.mainDom.style.transitionProperty = 'none';
+                that.mainDom.style.transition = 'none';
                 that.mainDom.style.left = `${-that.moveWidth}px`;
             }, aniTime)
         } else {
@@ -117,6 +115,7 @@ Swiper.prototype = {
         }
     },
     setActiveDot: function() {
+        console.log(this.swiperSpotDom.childElementCount);
         for(let i = 0; i < this.swiperSpotDom.childElementCount; i++) {
             if(i === this.nowIndex) {
                 document.getElementsByClassName('dot-item')[i].style.backgroundColor = '#ff5c1f';
@@ -135,7 +134,7 @@ Swiper.prototype = {
             that.timer = setInterval(that.nextSlider.bind(that, that.aniTime), that.intervalTime);
         })
         this.leftBtn.addEventListener('click', function() {
-            that.throttle(that.prevSlider, 300, 300);
+            that.throttle(that.prevSlider, 300);
         })
 
 
@@ -147,7 +146,7 @@ Swiper.prototype = {
             that.timer = setInterval(that.nextSlider.bind(that, that.aniTime), that.intervalTime);
         })
         this.rightBtn.addEventListener('click', function() {
-            that.throttle(that.nextSlider, 300, 300);
+            that.throttle(that.nextSlider, 300);
         })
 
         // 小圆点事件绑定
@@ -161,8 +160,8 @@ Swiper.prototype = {
             const event = e;
             let target = event.target;
             if (target.tagName.toLowerCase() === "li") {
-                var ret = this.querySelectorAll("li");
-                let index = Array.prototype.indexOf.call(ret, target);
+                var ret = this.querySelectorAll("li"); //　ret是一个NodeList
+                let index = Array.prototype.indexOf.call(ret, target); // 通过 call 方法来实现将 NodeList 对象视作数组, 绕过ret不是array这一点. 因为所有的数组方法（例如 indexOf）都可以通过 call 或 apply 这两个方法来调用，并且可以指定任何对象作为 this，即使该对象并不是一个数组。
                 that.nowIndex = index;
                 that.setActiveDot();
                 that.mainDom.style.transition = `left .8s`
@@ -171,10 +170,10 @@ Swiper.prototype = {
         })
 
     },
-    throttle: function(handle, delay, val) {
+    throttle: function(handle, delay) {
         let now = Date.now();
         if(now - this.prev > delay) {
-            handle.call(this, val);
+            handle.call(this);
             this.prev = now;
         }
     }
