@@ -7,6 +7,7 @@ const Swiper = function(obj) {
 
     this.container = document.querySelector('.swiper-container');
     this.moveWidth = 640; // 1408
+    this.imgWidth = obj.imgWidth || 200;
     this.nowIndex = 3;
     this.leftBtn;
     this.rightBtn;
@@ -25,25 +26,11 @@ Swiper.prototype = {
 
         let li = '';
         for(let i = 0; i < this.retImgArr.length; i++) {
-            if(i === 2 || i === 4) {
-                li += `<li class="swiper-item-small" style="left: ${i * this.moveWidth}px; width: ${this.moveWidth}px; height: 100%">
-                <a href="${this.retImgArr[i].url}">
-                    <img src="${this.retImgArr[i].src}">
-                </a>
-                </li>`;
-            }else if(i === 3) {
-                li += `<li class="swiper-item-big" style="left: ${i * this.moveWidth}px; width: ${this.moveWidth}px; height: 100%">
-                <a href="${this.retImgArr[i].url}">
-                    <img src="${this.retImgArr[i].src}">
-                </a>
-                </li>`;
-            }else {
-                li += `<li class="swiper-item" style="left: ${i * this.moveWidth}px; width: ${this.moveWidth}px; height: 100%">
+            li += `<li class="swiper-item" style="left: ${(i - 2) * this.moveWidth}px; width: ${this.imgWidth}px">
                     <a href="${this.retImgArr[i].url}">
                         <img src="${this.retImgArr[i].src}">
                     </a>
                 </li>`;
-            }
             
         }
         this.mainDom.innerHTML = li;
@@ -82,61 +69,82 @@ Swiper.prototype = {
         this.container.appendChild(this.nextBtn);
     },
     nextSlider: function() {
-        let that = this;
-        that.nowIndex++;
-        that.mainDom.style.transition = `left ${that.aniTime}ms`;
-        that.mainDom.style.left = `$-{that.nowIndex * that.moveWidth}px`;
-
-        if(that.nowIndex === that.retImgArr.length - 2) {
-            that.nowIndex = 1;
-            this.setActiveSpot();
-            setTimeout(function() {
-                that.mainDom.style.transition = 'none';
-                that.mainDom.style.left = `-${that.moveWidth}px`;
-            }, that.aniTime);
+        if(this.imgArr.length === 1) {
+            return;
+        }else if(this.imgArr.length === 2) {
+            this.nowIndex = this.nowIndex ? 0 : 2;
+            this.setScale();
         }else {
-            this.changeImgSize();
-            this.setActiveSpot();
+            let that = this;
+            this.nowIndex++;
+            this.mainDom.style.transition = `left ${that.aniTime}ms`;
+            this.mainDom.style.left = `$-{this.nowIndex * this.moveWidth}px`;
+
+            if(that.nowIndex === that.retImgArr.length - 2) {
+                this.setActiveSpot();
+                setTimeout(function() {
+                    that.nowIndex = 1;
+                    that.setScale();
+                    that.mainDom.style.transition = 'none';
+                    that.mainDom.style.left = `-${that.moveWidth}px`;
+                }, that.aniTime);
+            }else {
+                this.setScale();
+                this.setActiveSpot();
+            }
         }
+        
     },
     prevSlider:function() {
         if(this.imgArr.length === 1) {
             return;
         }else if(this.imgArr.length === 2) {
             this.nowIndex = this.nowIndex ? 0 : 2;
-        }
-        let that = this;
-        that.nowIndex--;
-        that.mainDom.style.transition = `right ${that.aniTime}ms`;
-        that.mainDom.style.left = `-${that.nowIndex * that.moveWidth}px`;
+            this.setScale();
+        } else {
+            let that = this;
+            this.nowIndex--;
+            this.mainDom.style.transition = `right ${this.aniTime}ms`;
+            this.mainDom.style.left = `-${this.nowIndex * this.moveWidth}px`;
 
-        if(that.nowIndex === 1) {
-            that.nowIndex = that.retImgArr.length - 2;
-            that.setActiveSpot();
-            setTimeout(function() {
-                that.mainDom.style.transition = 'none';
-                that.mainDom.style.left = `-${that.nowIndex * that.moveWidth}px`;
-            }, that.aniTime);
-        }else {
-            that.changeImgSize();
-            that.setActiveSpot();
+            if(this.nowIndex === 1) {
+                this.setActiveSpot();
+                setTimeout(function() {
+                    that.nowIndex = that.retImgArr.length - 2;
+                    that.setScale();
+                    that.mainDom.style.transition = 'none';
+                    that.mainDom.style.left = `-${that.nowIndex * that.moveWidth}px`;
+                }, that.aniTime);
+            }else {
+                this.setScale();
+                this.setActiveSpot();
+            }
         }
-    },
-    changeImgSize:function() {
-        this.mainDom.children[this.nowIndex].style.width = `${this.moveWidth * 1.2}px`;
-        this.mainDom.children[this.nowIndex].style.height = `${this.moveWidth * 1.2}px`;
         
-        this.mainDom.children[this.nowIndex - 1].style.width = `${this.moveWidth * 0.5}px`;
-        this.mainDom.children[this.nowIndex - 1].style.height = `${this.moveWidth * 0.5}px`;
+    },
+    setScale:function() {
+        for(let i = 0; i < this.mainDom.children.length; i++) {
+            if(this.imgArr.length === 2) {
+                this.mainDom.children[i].style.left = `${(this.moveWidth/4) - (this.imgWidth/2)}px`;
+                this.mainDom.children[i].style.left = `${(this.moveWidth/4)*3 - (this.imgWidth/2)}px`;
+            }else if(this.imgArr.length === 1) {
+                this.mainDom.children[i].style.left = `${(this.moveWidth/2) - (this.imgWidth/2)}px`;
+            }else {
+                this.mainDom.children[i].style.left = `${(i - 1) * this.moveWidth}px`;
+            }
 
-        this.mainDom.children[this.nowIndex + 1].style.width = `${this.moveWidth * 0.5}px`;
-        this.mainDom.children[this.nowIndex + 1].style.height = `${this.moveWidth * 0.5}px`;
+            if(i === this.nowIndex) {
+                this.mainDom.children[i].style.transform = `scale(1)`;
+            }else {
+                this.mainDom.children[i].style.transform = `scale(${this.scale})`;
+            }
+        }
     },
     setActiveSpot: function() {
         for(let i = 0; i < this.spotDom.children.length; i++) {
             if(i === this.nowIndex) {
                 this.spotDom.children[i].style.backgroundColor = '#ff5c1f';
-            }else {
+            } else {
                 this.spotDom.children[i].style.backgroundColor = '#fff';
             }
         }
