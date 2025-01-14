@@ -15,7 +15,6 @@ const Swiper = function(obj) {
     this.container = document.querySelector('.swiper-container');
     this.container.style.width =  `${this.containerWidth}px`;
     this.imgWidth = obj.imgWidth || 200;
-    console.log(this.imgWidth, this.containerWidth);
     this.nowIndex = 3;
     this.leftBtn;
     this.rightBtn;
@@ -42,6 +41,7 @@ Swiper.prototype = {
             
         }
         this.mainDom.innerHTML = li;
+        this.setScale();
 
         let spotLi = '';
         for(let i = 0; i < this.imgArr.length; i++) {
@@ -63,7 +63,7 @@ Swiper.prototype = {
         this.mainDom = document.createElement('ul');
         this.mainDom.className = 'swiper-main';
         this.mainDom.style.width = `${this.imgWidth * this.retImgArr.length}px`;
-        this.mainDom.style.left = `-${this.imgWidth * 2}px`;
+        this.mainDom.style.left = `-${this.imgWidth}px`;
         this.container.appendChild(this.mainDom);
 
         this.spotDom = document.createElement('ul');
@@ -92,20 +92,22 @@ Swiper.prototype = {
             this.mainDom.style.transition = `left ${that.aniTime}ms`;
             this.mainDom.style.left = `${parseInt(this.mainDom.style.left) - this.imgWidth}px`;
 
-            if(that.nowIndex === this.imgArr.length + 1) {
-                this.setActiveSpot();
+            if(that.nowIndex === this.retImgArr.length - 2) {
                 setTimeout(function() {
-                    that.nowIndex = 1;
-                    that.setScale();
                     that.mainDom.style.transition = 'none';
-                    that.mainDom.style.left = `-${that.imgWidth * 2}px`;
+                    that.nowIndex = 2;
+                    that.mainDom.style.left = `-${that.imgWidth * (that.nowIndex - 2)}px`;
+                    that.setScale();
+                    console.log(that.nowIndex, that.imgWidth, that.mainDom.style.left);
+                    
+                    that.setActiveSpot();
                 }, that.aniTime);
             }else {
+                console.log(this.nowIndex, this.mainDom.style.left);
                 this.setScale();
                 this.setActiveSpot();
             }
         }
-        
     },
     prevSlider:function() {
         if(this.imgArr.length === 1) {
@@ -120,12 +122,15 @@ Swiper.prototype = {
             this.mainDom.style.left = `${parseInt(this.mainDom.style.left) + this.imgWidth}px`;
 
             if(this.nowIndex === 1) {
-                this.setActiveSpot();
+                
                 setTimeout(function() {
-                    that.nowIndex = that.retImgArr.length - 2;
-                    that.setScale();
                     that.mainDom.style.transition = 'none';
-                    that.mainDom.style.left = `-${that.nowIndex * that.imgWidth}px`;
+                    that.nowIndex = that.retImgArr.length - 2;
+                    
+                    that.mainDom.style.left = `-${(that.nowIndex) * that.imgWidth}px`;
+                    that.setScale();
+                    that.setActiveSpot();
+                    
                 }, that.aniTime);
             }else {
                 this.setScale();
@@ -199,11 +204,11 @@ Swiper.prototype = {
             if(target.tagName.toLowerCase() === 'li') {
                 let ret = this.querySelectorAll('li');
                 let index = Array.prototype.indexOf.call(ret, target);
-                that.nowIndex = index;
+                that.nowIndex = index + 2;
                 that.setActiveSpot();
-                that.changeImgSize();
+                that.setScale();
                 that.mainDom.style.transition = `left .8s`
-                that.mainDom.style.left = `${-that.nowIndex * that.imgWidth}px`;
+                that.mainDom.style.left = `-${that.nowIndex * that.imgWidth}px`;
             }
         })
     },
