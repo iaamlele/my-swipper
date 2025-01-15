@@ -63,7 +63,7 @@ Swiper.prototype = {
         this.mainDom = document.createElement('ul');
         this.mainDom.className = 'swiper-main';
         this.mainDom.style.width = `${this.imgWidth * this.retImgArr.length}px`;
-        this.mainDom.style.left = `-${this.imgWidth}px`;
+        this.mainDom.style.left = `-${this.imgWidth * 2}px`;
         this.container.appendChild(this.mainDom);
 
         this.spotDom = document.createElement('ul');
@@ -91,19 +91,19 @@ Swiper.prototype = {
             this.nowIndex++;
             this.mainDom.style.transition = `left ${that.aniTime}ms`;
             this.mainDom.style.left = `${parseInt(this.mainDom.style.left) - this.imgWidth}px`;
-
-            if(that.nowIndex === this.retImgArr.length - 2) {
+            console.log(this.mainDom.style.left, this.mainDom.children[0].style.left, this.mainDom.children[this.nowIndex].style.left);
+            if(this.nowIndex === this.retImgArr.length - 2) {
+                this.setScale();
+                this.nowIndex = 2;
+                this.setActiveSpot();
+                
                 setTimeout(function() {
                     that.mainDom.style.transition = 'none';
-                    that.nowIndex = 2;
-                    that.mainDom.style.left = `-${that.imgWidth * (that.nowIndex - 2)}px`;
+                    that.mainDom.style.left = `-${that.imgWidth * (that.nowIndex - 1)}px`;
                     that.setScale();
-                    console.log(that.nowIndex, that.imgWidth, that.mainDom.style.left);
-                    
-                    that.setActiveSpot();
+                    that.setActiveSpot();  
                 }, that.aniTime);
             }else {
-                console.log(this.nowIndex, this.mainDom.style.left);
                 this.setScale();
                 this.setActiveSpot();
             }
@@ -120,17 +120,15 @@ Swiper.prototype = {
             this.nowIndex--;
             this.mainDom.style.transition = `left ${this.aniTime}ms`;
             this.mainDom.style.left = `${parseInt(this.mainDom.style.left) + this.imgWidth}px`;
-
+            console.log(this.mainDom.style.left, this.mainDom.children[this.nowIndex].style.left);
             if(this.nowIndex === 1) {
-                
+                this.setScale();
+                this.nowIndex = that.imgArr.length + 1;
+                this.setActiveSpot();
                 setTimeout(function() {
                     that.mainDom.style.transition = 'none';
-                    that.nowIndex = that.retImgArr.length - 2;
-                    
-                    that.mainDom.style.left = `-${(that.nowIndex) * that.imgWidth}px`;
                     that.setScale();
-                    that.setActiveSpot();
-                    
+                    that.mainDom.style.left = `-${(that.nowIndex - 1) * that.imgWidth}px`;
                 }, that.aniTime);
             }else {
                 this.setScale();
@@ -147,7 +145,7 @@ Swiper.prototype = {
             }else if(this.imgArr.length === 1) {
                 this.mainDom.children[i].style.left = `${(this.containerWidth/2) - (this.imgWidth/2)}px`;
             }else {
-                this.mainDom.children[i].style.left = `${(i - 1) * this.imgWidth}px`;
+                this.mainDom.children[i].style.left = `${i * this.imgWidth}px`;
             }
 
             if(i === this.nowIndex) {
