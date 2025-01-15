@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>card swiper</title>
+        <style>
+            ul{padding: 0; list-style: none;}
+            .swiper-container{
+                background-color: #222;
+                height: 200px;
+                margin: 0 auto;
+                position: relative;
+                overflow: hidden;
+            }
+            .swiper-main{
+                margin: 0;
+                height: 100%;
+                position: relative;
+                overflow: hidden;
+            }
+            .swiper-item{
+                height: 100%;
+                display: inline-block;
+                position: absolute;
+            }
+            .swiper-spot{
+                width: 100%;
+                height: 15px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                bottom: 10px;
+            }
+            .swiper-spot .swiper-spot-item{
+                width: 15px;
+                height: 15px;
+                border-radius: 50%;
+                background-color: #ccc;
+                margin-left: 10px;
+            }
+            .swiper-spot .swiper-spot-item:nth-of-type(1) {
+                margin-left: 0;
+            }
+            img {
+                width: 100%;
+                height: 100%;
+                display: block;
+            }
+            .swiper-last{
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 30px;
+                height: 30px;
+            }
+            .swiper-next{
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 30px;
+                height: 30px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="swiper-container"></div>
+        <script src="card_swiper.js"></script>
+        <script>
+            const imgArr = [
+                {
+                    url: '#',
+                    src: '../img/1.png',
+                },
+                {
+                    url: '#',
+                    src: '../img/2.png',
+                },
+                {
+                    url: '#',
+                    src: '../img/3.png',
+                },
+                {
+                    url: '#',
+                    src: '../img/4.png',
+                },
+                {
+                    url: '#',
+                    src: '../img/5.png',
+                }
+            ]
+            const swiper = new Swiper({
+                imgArr,
+                imgWidth: 320,
+                aniTime: 1000, // 动画时间
+                intervalTime: 1500, // 停留时间
+                autoplay: true, // 是否自动播放
+                scale: 0.8, // 图片缩放
+                gap: -200 // 图片之间间隔
+            }).init();
+        </script>
+    </body>
+</html>
