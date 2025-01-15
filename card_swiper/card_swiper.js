@@ -91,7 +91,7 @@ Swiper.prototype = {
             this.nowIndex++;
             this.mainDom.style.transition = `left ${that.aniTime}ms`;
             this.mainDom.style.left = `${parseInt(this.mainDom.style.left) - this.imgWidth}px`;
-            console.log(this.mainDom.style.left, this.mainDom.children[0].style.left, this.mainDom.children[this.nowIndex].style.left);
+            // console.log(this.mainDom.style.left, this.mainDom.children[0].style.left, this.mainDom.children[this.nowIndex].style.left);
             if(this.nowIndex === this.retImgArr.length - 2) {
                 this.setScale();
                 this.nowIndex = 2;
