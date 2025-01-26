@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset = "utf-8">
+        <title>swiper</title>
+        <style>
+            ul{padding: 0; list-style: none;}
+            .swiper-list{
+                width: 640px;
+                height: 360px;
+                margin: 0 auto;
+                position: relative;
+                overflow: hidden;
+            }
+            .swiper-main {
+                height: 100%;
+                position: relative;
+                overflow: hidden;
+            }
+            .swiper-item{
+                height: 100%;
+                display: inline;
+                position: absolute;
+            }
+            img {
+                width: 100%;
+                height: 100%;
+                display: block;
+            }
+        
+            .swiper-dot{
+                width: 100%;
+                height: 15px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                bottom: 10px;
+            }
+            .swiper-dot .dot-item{
+                width: 15px;
+                height: 15px;
+                border-radius: 50%;
+                background-color: #ccc;
+                margin-left: 10px;
+            }
+            
+            /* 这是一个伪类选择器，选择 .dot-item 中的第一个元素 */
+            .swiper-dot .dot-item:nth-of-type(1) { 
+                margin-left: 0;
+            }
+        
+            .left-btn{
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 30px;
+                height: 30px;
+            }
+            .right-btn{
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 30px;
+                height: 30px;
+            }
+        </style>
+        
+    </head>
+    <div class="swiper-list"></div>
+    <script src="./normal_swiper.js"></script>
+    <script>
+        const bef_time = Date.now();
+
+        const imgArr = [
+            {
+                url: '#',
+                imgPath: '../img/1.png',
+            },
+            {
+                url: '#',
+                imgPath: '../img/2.png',
+            },
+            {
+                url: '#',
+                imgPath: '../img/3.png',
+            },
+            {
+                url: '#',
+                imgPath: '../img/4.png',
+            },
+            {
+                url: '#',
+                imgPath: '../img/5.png',
+            }
+        ];
+        const mySwiper = new Swiper({
+            container: document.getElementsByClassName("swiper-list"),
+            imgArr
+        });
+        console.log(Date.now() - bef_time);
+    </script>
+</html>
