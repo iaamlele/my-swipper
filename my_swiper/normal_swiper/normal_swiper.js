@@ -1,25 +1,33 @@
 (function(global) {
     function Swiper(obj) {
-        this.imgArr = obj.imgArr || [];
+        if(!obj.container) {
+            throw new Error('Container element is required');
+        }
+        this.swiperListDom = typeof container === 'string' ? document.querySelector(container) : container;
+        const images = this.swiperListDom.querySelectorAll('img');
+        this.imgArr = Array.from(images).map(img => ({
+            ul: '#',
+            imgPath: img.src
+        }));
+
         this.retImgArr = [this.imgArr[this.imgArr.length-1], ...this.imgArr, this.imgArr[0]];
         this.aniTime = obj.aniTime || 1500;
         this.intervalTime = obj.intervalTime + this.aniTime || 2500;
+        this.moveWidth = this.swiperListDom.offsetWidth; 
+
         this.nowIndex = 0;
-
-        this.swiperListDom = document.getElementsByClassName('swiper-list')[0];
-        this.mainDom;
-        this.swiperSpotDom;
-        this.leftBtn;
-        this.rightBtn;
-        
-        this.moveWidth = this.swiperListDom.offsetWidth; //
+        this.mainDom = null;
+        this.swiperSpotDom = null;
+        this.leftBtn = null;
+        this.rightBtn = null;
         this.timer = null;
-
         this.prev = Date.now();
-
         this.autoplay = obj.autoplay || true;
 
         this.init();
+        this.initStyles();
+
+        this.swiperListDom.innerHTML = '';
     }
 
     Swiper.prototype = {
@@ -82,6 +90,78 @@
                 this.leftBtn.style.display = 'none';
                 this.rightBtn.style.display = 'none';
             }
+        },
+        initStyles: function() {
+            if(document.querySelector('#swiper-styles')) {
+                return;
+            }
+            const styleElement = document.createElement('style');
+            styleElement.id = 'swiper-styles';
+            styleElement.textContent = `
+                ul{padding: 0; list-style: none;}
+                .swiper-list{
+                    width: 640px;
+                    height: 360px;
+                    margin: 0 auto;
+                    position: relative;
+                    overflow: hidden;
+                }
+                .swiper-main {
+                    height: 100%;
+                    position: relative;
+                    overflow: hidden;
+                }
+                .swiper-item{
+                    height: 100%;
+                    display: inline;
+                    position: absolute;
+                }
+                img {
+                    width: 100%;
+                    height: 100%;
+                    display: block;
+                }
+            
+                .swiper-dot{
+                    width: 100%;
+                    height: 15px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    position: absolute;
+                    bottom: 10px;
+                }
+                .swiper-dot .dot-item{
+                    width: 15px;
+                    height: 15px;
+                    border-radius: 50%;
+                    background-color: #ccc;
+                    margin-left: 10px;
+                }
+                
+                .swiper-dot .dot-item:nth-of-type(1) { 
+                    margin-left: 0;
+                }
+            
+                .left-btn{
+                    position: absolute;
+                    left: 15px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    width: 30px;
+                    height: 30px;
+                }
+                .right-btn{
+                    position: absolute;
+                    right: 15px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    width: 30px;
+                    height: 30px;
+                }
+            `;
+            document.head.appendChild(styleElement);
+
         },
         prevSlider(aniTime) {
             let that = this;
